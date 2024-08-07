@@ -1,7 +1,6 @@
 import { ApolloClient, InMemoryCache, from } from '@apollo/client';
 import { HttpLink } from '@apollo/client/link/http';
 import { onError } from '@apollo/client/link/error';
-import { ApolloLink } from '@apollo/client';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
@@ -16,37 +15,24 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const httpLink = new HttpLink({ uri: 'http://localhost:4000/graphql' });
 
-const omitIntrospectionLink = new ApolloLink((operation, forward) => {
-    if (operation.operationName === 'IntrospectionQuery') {
-        return null;
-    }
-    return forward(operation);
-});
-
 const client = new ApolloClient({
     cache: new InMemoryCache({
         typePolicies: {
-            Query: {
+            Company: {
+                keyFields: ["id"],
                 fields: {
-                    books: {
-                        merge(existing = [], incoming) {
-                            return [...existing, ...incoming];
+                    isLocal: {
+                        read(_, { readField }) {
+                            const localCompanies = ['Penguin Random House', 'Chatto & Windus'];
+                            debugger
+                            return localCompanies.includes(readField('name'));
                         },
                     },
                 },
             },
-            Book: {
-                keyFields: ["id"],
-            },
-            Author: {
-                keyFields: ["id"],
-            },
-            Company: {
-                keyFields: ["id"],
-            },
         },
     }),
-    link: from([errorLink, omitIntrospectionLink, httpLink]),
+    link: from([errorLink, httpLink]),
 });
 
 export default client;

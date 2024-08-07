@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
-import {useLazyQuery} from '@apollo/client';
-import {SEARCH_COMPANY_BY_ID_QUERY} from "../graphql/queries";
+import React, { useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { SEARCH_COMPANY_BY_ID_QUERY } from '../graphql/queries';
 
 function CompanySearchById() {
     const [id, setId] = useState('');
-    const [searchCompanyById, {loading, error, data}] = useLazyQuery(
-        SEARCH_COMPANY_BY_ID_QUERY);
+    const [searchCompanyById, { loading, error, data }] = useLazyQuery(
+        SEARCH_COMPANY_BY_ID_QUERY
+    );
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        searchCompanyById({variables: {id}});
+        searchCompanyById({ variables: { id } });
     };
 
     return (
@@ -30,8 +31,15 @@ function CompanySearchById() {
             {data && data.searchCompanyById && (
                 <div>
                     <h3>Company Details</h3>
-                    <p><strong>ID:</strong> {data.searchCompanyById.id}</p>
-                    <p><strong>Name:</strong> {data.searchCompanyById.name}</p>
+                    <p>
+                        <strong>ID:</strong> {data.searchCompanyById.id}
+                    </p>
+                    <p>
+                        <strong>Name:</strong> {data.searchCompanyById.name}
+                    </p>
+                    <p>
+                        <strong>Is Local:</strong> {data.searchCompanyById.isLocal ? 'Yes' : 'No'}
+                    </p>
                 </div>
             )}
         </div>

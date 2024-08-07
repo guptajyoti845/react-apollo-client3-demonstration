@@ -61,6 +61,7 @@ const typeDefs = gql`
     type Author {
         id: ID!
         name: String!
+        bio: String  # Add this line if you want to include bio
         company: Company!
     }
 
@@ -73,6 +74,8 @@ const typeDefs = gql`
     type Query {
         books: [Book]
         searchCompanyById(id: ID!): Company
+        authors: [Author]
+        author(id: ID!): Author
     }
 
     input CompanyInput {
@@ -100,6 +103,20 @@ const resolvers = {
         searchCompanyById: (_, { id }) => {
             const companies = books.map(book => book.author.company);
             return companies.find(company => company.id === id);
+        },
+        authors: () => {
+            const authors = books.map(book => book.author);
+            return authors.reduce((unique, author) => {
+                const exists = unique.find(a => a.id === author.id);
+                if (!exists) {
+                    unique.push(author);
+                }
+                return unique;
+            }, []);
+        },
+        author: (_, { id }) => {   // Add this resolver
+            const authors = books.map(book => book.author);
+            return authors.find(author => author.id === id);
         },
     },
     Mutation: {
@@ -129,7 +146,7 @@ const resolvers = {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: false,
+    introspection: true,  // Enabled introspection for development purposes
 });
 
 server.listen().then(({ url }) => {
