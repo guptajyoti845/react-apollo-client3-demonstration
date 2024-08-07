@@ -114,7 +114,7 @@ const resolvers = {
                 return unique;
             }, []);
         },
-        author: (_, { id }) => {   // Add this resolver
+        author: (_, { id }) => {
             const authors = books.map(book => book.author);
             return authors.find(author => author.id === id);
         },
@@ -146,7 +146,7 @@ const resolvers = {
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true,  // Enabled introspection for development purposes
+    introspection: true,
 });
 
 server.listen().then(({ url }) => {

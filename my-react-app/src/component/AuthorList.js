@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useApolloClient } from '@apollo/client';
-import { AUTHORS_QUERY, AUTHOR_DETAILS_QUERY } from '../graphql/queries'; // Update with the actual query imports
+import { AUTHORS_QUERY, AUTHOR_DETAILS_QUERY } from '../graphql/queries';
 
 function AuthorList() {
     const { loading, error, data } = useQuery(AUTHORS_QUERY);

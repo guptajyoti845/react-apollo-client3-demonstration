@@ -12,15 +12,15 @@ function AddBook() {
             __typename: 'Mutation',
             createBook: {
                 __typename: 'Book',
-                id: 'book-optimistic-id', // Temporary ID
+                id: 'book-optimistic-id',
                 title,
                 author: {
                     __typename: 'Author',
-                    id: 'author-optimistic-id', // Temporary ID
+                    id: 'author-optimistic-id',
                     name: authorName,
                     company: {
                         __typename: 'Company',
-                        id: 'company-optimistic-id', // Temporary ID
+                        id: 'company-optimistic-id',
                         name: companyName,
                     },
                 },
