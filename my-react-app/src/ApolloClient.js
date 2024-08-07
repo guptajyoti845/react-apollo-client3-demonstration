@@ -24,7 +24,6 @@ const client = new ApolloClient({
                     isLocal: {
                         read(_, { readField }) {
                             const localCompanies = ['Penguin Random House', 'Chatto & Windus'];
-                            debugger
                             return localCompanies.includes(readField('name'));
                         },
                     },
