@@ -1,3 +1,5 @@
 .idea
 graphql-server/node_modules
 my-react-app/node_modules
+my-react-app/.idea
+graphql-server/.idea
