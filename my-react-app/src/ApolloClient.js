@@ -1,6 +1,22 @@
 import { ApolloClient, InMemoryCache, from } from '@apollo/client';
 import { HttpLink } from '@apollo/client/link/http';
 import { onError } from '@apollo/client/link/error';
+import { gql } from '@apollo/client';
+import { favoriteBookVar } from './component/reactiveVars';
+
+const typeDefs = gql`
+    extend type Book {
+        isFavorite: Boolean!
+    }
+`;
+
+const resolvers = {
+    Book: {
+        isFavorite: (book) => {
+            return favoriteBookVar().some(favoriteBook => favoriteBook.id === book.id);
+        },
+    },
+};
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
@@ -29,9 +45,20 @@ const client = new ApolloClient({
                     },
                 },
             },
+            Book: {
+                fields: {
+                    isFavorite: {
+                        read(_, { readField }) {
+                            return resolvers.Book.isFavorite({ id: readField('id') });
+                        },
+                    },
+                },
+            },
         },
     }),
     link: from([errorLink, httpLink]),
+    typeDefs,
+    resolvers,
 });
 
 export default client;

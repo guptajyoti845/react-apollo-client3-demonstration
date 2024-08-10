@@ -2,8 +2,8 @@ import React from 'react';
 import { useQuery, gql } from '@apollo/client';
 import ToggleFavoriteButton from './ToggleFavoriteButton';
 
-const GET_BOOKS = gql`
-    query GetBooks {
+const GET_FAVORITE_BOOKS = gql`
+    query GetFavoriteBooks {
         books {
             id
             title
@@ -15,20 +15,21 @@ const GET_BOOKS = gql`
     }
 `;
 
-function BookList() {
-    const { loading, error, data } = useQuery(GET_BOOKS);
+function FavoriteBooks() {
+    const { data, loading, error } = useQuery(GET_FAVORITE_BOOKS);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
+    const favoriteBooks = data.books.filter(book => book.isFavorite);
+
     return (
         <div>
-            <h2>Book List</h2>
+            <h3>Favorite Books</h3>
             <ul>
-                {data.books.map((book) => (
-                    <li key={book.id}>
-                        <strong>{book.title}</strong> by {book.author.name}
-                        {book.isFavorite ? ' ★' : ''}
+                {favoriteBooks.map((book, index) => (
+                    <li key={index}>
+                        {book.title} by {book.author.name}
                         <ToggleFavoriteButton book={book} />
                     </li>
                 ))}
@@ -37,4 +38,4 @@ function BookList() {
     );
 }
 
-export default BookList;
+export default FavoriteBooks;
