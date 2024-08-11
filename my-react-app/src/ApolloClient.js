@@ -3,7 +3,7 @@ import { HttpLink } from '@apollo/client/link/http';
 import { onError } from '@apollo/client/link/error';
 import { gql } from '@apollo/client';
 import { favoriteBookVar } from './component/reactiveVars';
-
+const LOCAL_COMPANIES = ['Penguin Random House', 'Chatto & Windus'];
 const typeDefs = gql`
     extend type Book {
         isFavorite: Boolean!
@@ -39,8 +39,7 @@ const client = new ApolloClient({
                 fields: {
                     isLocal: {
                         read(_, { readField }) {
-                            const localCompanies = ['Penguin Random House', 'Chatto & Windus'];
-                            return localCompanies.includes(readField('name'));
+                            return LOCAL_COMPANIES.includes(readField('name'));
                         },
                     },
                 },

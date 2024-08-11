@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {gql, useMutation} from '@apollo/client';
 import {CREATE_BOOK_MUTATION} from '../graphql/mutations';
+import {favoriteBookVar} from "./reactiveVars";
 
 function AddBook() {
     const [title, setTitle] = useState('');
@@ -24,6 +25,7 @@ function AddBook() {
                         name: companyName,
                     },
                 },
+                isFavorite: false,
             },
         },
         update: (cache, {data: {createBook}}) => {
@@ -31,7 +33,10 @@ function AddBook() {
                 fields: {
                     books(existingBooks = []) {
                         const newBookRef = cache.writeFragment({
-                            data: createBook,
+                            data: {
+                                ...createBook,
+                                isFavorite: false,
+                            },
                             fragment: gql`
                                 fragment NewBook on Book {
                                     id
@@ -44,6 +49,7 @@ function AddBook() {
                                             name
                                         }
                                     }
+                                    isFavorite
                                 }
                             `,
                         });

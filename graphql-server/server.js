@@ -99,7 +99,10 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        books: () => books,
+        books: () => {
+            return books;
+            // throw new Error('No books available!')
+        },
         searchCompanyById: (_, { id }) => {
             const companies = books.map(book => book.author.company);
             return companies.find(company => company.id === id);
