@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {gql, useMutation} from '@apollo/client';
 import {CREATE_BOOK_MUTATION} from '../graphql/mutations';
-import {favoriteBookVar} from "./reactiveVars";
-
 function AddBook() {
     const [title, setTitle] = useState('');
     const [authorName, setAuthorName] = useState('');
